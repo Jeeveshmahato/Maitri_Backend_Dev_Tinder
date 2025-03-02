@@ -17,7 +17,12 @@ const validatetoupdate = (req) => {
   //   throw new Error("Invalid number");
   // }
 };
-const validatetoSignup = (req)=>{
-    
-}
-module.exports = validatetoupdate ;
+const validatetoSignup = (req) => {};
+const validateEditCheck = (req) => {
+  const validateitems = ["firstName", "lastName", "skills", "age", "gender"];
+  const checkvalidate = Object.keys(req.body).every((k) =>
+    validateitems.includes(k)
+  );
+  return checkvalidate;
+};
+module.exports = { validatetoupdate, validateEditCheck };
