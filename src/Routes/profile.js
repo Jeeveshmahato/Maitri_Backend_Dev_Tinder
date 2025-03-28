@@ -14,8 +14,11 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
   }
 });
 profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
+  // console.log("Request body:", req.body); // Log request data
   try {
-    if (!validateEditCheck(req)) throw new Error("Edit check not valid");
+    if (!validateEditCheck(req)){
+      throw new Error("Edit check not valid");
+    } 
     const logedInUser = req.user;
 
     Object.keys(req.body).forEach((k) => {

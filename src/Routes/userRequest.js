@@ -1,34 +1,25 @@
 const express = require("express");
 const { userAuth } = require("../middleware/auth");
 const connectionRequestModel = require("../Model/connectionRequest");
-const { connection } = require("mongoose");
 const User = require("../Model/User");
 const userRequest = express.Router();
-const Save_data = "firstName lastName";
+const Save_data = "firstName lastName skills age gender img_Url";
 
 userRequest.get("/userrequest/pending", userAuth, async (req, res) => {
   try {
     const userId = req.user._id;
     const findUser = await connectionRequestModel
       .find({
-        $or: [
-          { toUserId: userId, status: "interested" },
-          { fromUserId: userId, status: "interested" },
-        ],
+        toUserId: userId,
+        status: "interested",
       })
-      .populate("fromUserId", Save_data)
-      .populate("toUserId", Save_data);
+      .populate("fromUserId", Save_data);
     if (findUser.length == 0) {
       throw new Error("No pending request found");
     }
 
-    const data = findUser.map((user) => {
-      if (user.fromUserId._id.toString() === userId.toString()) {
-        return user.toUserId;
-      }
-      return user.fromUserId;
-    });
-    res.send(data);
+    
+    res.send(findUser)
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -63,7 +54,9 @@ userRequest.get("/userrequest/accepted", userAuth, async (req, res) => {
 userRequest.get("/feed", userAuth, async (req, res) => {
   try {
     const pageno = req.query.pageno || 1;
-    let limit = req.query.limit || 2;
+    let limit = req.query.limit || 5;
+    // const pageno = req.query.pageno;
+    // let limit = req.query.limit;
     limit = limit > 50 ? 50 : limit;
     let skip = (pageno - 1) * limit;
     const logedInUser = req.user;
@@ -78,7 +71,7 @@ userRequest.get("/feed", userAuth, async (req, res) => {
           },
         ],
       })
-      .select("fromUserId toUserId");
+      .select("fromUserId  toUserId");
     const hiddenConnections = new Set();
     connections.forEach((element) => {
       hiddenConnections.add(element.toUserId.toString());

@@ -19,7 +19,7 @@ const validatetoupdate = (req) => {
 };
 const validatetoSignup = (req) => {};
 const validateEditCheck = (req) => {
-  const validateitems = ["firstName", "lastName", "skills", "age", "gender"];
+  const validateitems = ["firstName", "lastName", "skills", "age", "gender","img_Url"];
   const checkvalidate = Object.keys(req.body).every((k) =>
     validateitems.includes(k)
   );

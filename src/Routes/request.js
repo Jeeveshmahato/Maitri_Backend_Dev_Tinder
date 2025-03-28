@@ -4,7 +4,7 @@ const { userAuth } = require("../middleware/auth.js");
 const connectionRequestModel = require("../Model/connectionRequest.js");
 const User = require("../Model/User.js");
 
-connectionRouter.get(
+connectionRouter.post(
   "/connection/request/:status/:toUserId",
   userAuth,
   async (req, res) => {
@@ -39,17 +39,22 @@ connectionRouter.get(
         toUserId,
         status,
       });
-      await connectionRequest.save();
+      const data =await connectionRequest.save();
+      // const emailRes = await sendEmail.run(
+      //   "A new friend request from " + req.user.firstName,
+      //   req.user.firstName + " is " + status + " in " + toUser.firstName
+      // );
+      // console.log(emailRes);
       res.json({
         message: req.user.firstName + " " + status + " " + userId.firstName,
-        connectionRequest,
+        data,
       });
     } catch (error) {
       res.status(400).send(error.message);
     }
   }
 );
-connectionRouter.get(
+connectionRouter.post(
   "/connection/modifystatus/:status/:reqId",
   userAuth,
   async (req, res) => {
@@ -74,8 +79,8 @@ connectionRouter.get(
         throw new Error("No interested request found");
       }
       exisitUser.status = status;
-      await exisitUser.save();
-      res.send(exisitUser);
+     const data =  await exisitUser.save();
+     res.json({ message: "Connection request " + status, data });
     } catch (error) {
       res.status(400).send(error.message);
     }

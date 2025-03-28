@@ -29,15 +29,18 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    required: true,
     validate(value) {
       if (!validator.isStrongPassword(value)) {
         throw new Error("Invalid Password");
       }
     },
   },
+  img_Url: {
+    type: String,
+  },
   skills: {
     type: [String],
-    required: true,
     minlength: 3,
     maxlength: 10,
   },
@@ -47,7 +50,6 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-    required: true,
     validate(value) {
       if (!["male", "female", "other"].includes(value.toLowerCase())) {
         throw new Error("Gender must be male, female or other");
@@ -63,7 +65,10 @@ userSchema.methods.getjwt = async function () {
 userSchema.methods.bcryptfun = async function (passwordInputByUser) {
   const finduser = this;
   const hassPassword = finduser.password;
-    const validPassCheck = await bcrypt.compare(passwordInputByUser, hassPassword);
+  const validPassCheck = await bcrypt.compare(
+    passwordInputByUser,
+    hassPassword
+  );
   return validPassCheck;
 };
 module.exports = mongoose.model("User", userSchema);

@@ -3,25 +3,29 @@ const authRouter = express.Router();
 const bcrypt = require("bcrypt");
 const User = require("../Model/User");
 
-authRouter.post("/sigup", async (req, res) => {
-  const { firstName, lastName, email, password, skills, age, gender } =
-    req.body;
-  const encrptpass = await bcrypt.hash(password, 10);
-  console.log(encrptpass);
-
-  const user = new User({
-    firstName,
-    lastName,
-    email,
-    password: encrptpass,
-    skills,
-    age,
-    gender,
-  });
+authRouter.post("/signup", async (req, res) => {
+  
   try {
-    await user.save();
-    res.send("User Created Successfully");
+    const { firstName, lastName, email, password } = req.body;
+    const encrptpass = await bcrypt.hash(password, 10);
+    // console.log(encrptpass);
+
+    const user = new User({
+      firstName,
+      lastName,
+      email,
+      password: encrptpass,
+    });
+    const saveUser = await user.save();
+
+    const token = await saveUser.getjwt();
+
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // cookies expires in 7 days
+    });
+    res.json({ message: "user login sucessfully created", data: saveUser });
   } catch (error) {
+    console.log(error);
     res.status(400).send("User Created Unsuccessfully");
   }
 
@@ -43,7 +47,7 @@ authRouter.post("/login", async (req, res) => {
     if (!passCheck) {
       throw new Error("Invalid password");
     }
-    res.send("Logged in Successfully");
+    res.send(finduser);
   } catch (error) {
     res.status(400).send("Error : " + error.message);
   }
