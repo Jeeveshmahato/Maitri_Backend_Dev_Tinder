@@ -16,16 +16,16 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
 profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
   // console.log("Request body:", req.body); // Log request data
   try {
-    if (!validateEditCheck(req)){
+    if (!validateEditCheck(req)) {
       throw new Error("Edit check not valid");
-    } 
+    }
     const logedInUser = req.user;
 
     Object.keys(req.body).forEach((k) => {
       logedInUser[k] = req.body[k];
     });
-    await logedInUser.save();
-    res.send(`${logedInUser.firstName} Profile updated successfully`);
+    const user = await logedInUser.save();
+    res.send(user);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -34,9 +34,12 @@ profileRouter.patch("/profile/editpassword", userAuth, async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
     const logedInUser = req.user;
-    const matchPassword = await bcrypt.compare(currentPassword, logedInUser.password);
+    const matchPassword = await bcrypt.compare(
+      currentPassword,
+      logedInUser.password
+    );
     if (!matchPassword) throw new Error("Current Password is wrong");
-    const encryptedNewPassword = await bcrypt.hash(newPassword, 10); 
+    const encryptedNewPassword = await bcrypt.hash(newPassword, 10);
 
     logedInUser.password = encryptedNewPassword;
     await logedInUser.save();
