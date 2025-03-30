@@ -22,9 +22,12 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     const logedInUser = req.user;
 
     Object.keys(req.body).forEach((k) => {
-      logedInUser[k] = req.body[k];
+      if (req.body[k] !== undefined) {
+        logedInUser[k] = req.body[k];
+      }
     });
     const user = await logedInUser.save();
+    console.log("Updated user in DB:", user);
     res.send(user);
   } catch (error) {
     res.status(500).send(error.message);

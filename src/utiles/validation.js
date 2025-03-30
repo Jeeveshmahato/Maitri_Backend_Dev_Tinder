@@ -19,10 +19,14 @@ const validatetoupdate = (req) => {
 };
 const validatetoSignup = (req) => {};
 const validateEditCheck = (req) => {
-  const validateitems = ["firstName", "lastName", "skills", "age", "gender","img_Url"];
-  const checkvalidate = Object.keys(req.body).every((k) =>
-    validateitems.includes(k)
-  );
-  return checkvalidate;
+  const allowedFields = [
+    "firstName",
+    "lastName",
+    "skills",
+    "age",
+    "gender",
+    "img_Url",
+  ];
+  return Object.keys(req.body).every((k) => allowedFields.includes(k));
 };
 module.exports = { validatetoupdate, validateEditCheck };
