@@ -6,7 +6,7 @@ const userAuth = async(req, res, next) => {
     if (!token) {
       return res.status(401).json({ error: "No token provided, authorization denied" });
     }
-    jwt.verify(token, "shhhhh", async (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {
         return res.status(401).json({ error: "Invalid token" });
       }

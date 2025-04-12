@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema({
 });
 userSchema.methods.getjwt = async function () {
   const finduser = this;
-  const token = await jwt.sign({ id: finduser._id }, "shhhhh"); //token expires in 7days
+  const token = await jwt.sign({ id: finduser._id }, process.env.JWT_SECRET); //token expires in 7days
   return token;
 };
 userSchema.methods.bcryptfun = async function (passwordInputByUser) {
