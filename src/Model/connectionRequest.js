@@ -20,7 +20,7 @@ const connectionRequestSchema = new mongoose.Schema(
       },
     },
   },
-  { Timestamp: true }
+  { timestamps: true }
 );
 connectionRequestSchema.pre("save", function (next) {
   const connectionRequest = this;

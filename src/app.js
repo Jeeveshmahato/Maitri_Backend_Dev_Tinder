@@ -21,7 +21,7 @@ app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", connectionRouter);
 app.use("/", userRequest);
-
+require("./utiles/cornJob")
 connectDB()
   .then(() => {
     console.log("MongoDB Connected...");
