@@ -10,10 +10,10 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
       currency: "INR",
       receipt: "receipt#1",
       notes: {
-        firstName: "testfirst",
-        lastName: "testlast",
-        emailId: "testemail",
-        membershipType: "membershipType",
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        emailId: req.user.emailId,
+        membershipType: req.body.membershipType,
       },
     });
     console.log(order);
