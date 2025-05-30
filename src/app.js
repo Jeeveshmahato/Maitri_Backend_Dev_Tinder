@@ -8,8 +8,10 @@ const authRouter = require("./Routes/auth");
 const profileRouter = require("./Routes/profile");
 const connectionRouter = require("./Routes/request");
 const userRequest = require("./Routes/userRequest");
-const paymentRouter = require("./Routes/payment")
+const paymentRouter = require("./Routes/payment");
+const http = require("http");
 const cors = require("cors");
+const initailizeSocket = require("./utiles/Socket");
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -23,11 +25,13 @@ app.use("/", profileRouter);
 app.use("/", connectionRouter);
 app.use("/", userRequest);
 app.use("/", paymentRouter);
-require("./utiles/cornJob")
+require("./utiles/cornJob");
+const server = http.createServer(app);
+initailizeSocket(server);
 connectDB()
   .then(() => {
     console.log("MongoDB Connected...");
-    app.listen(parseInt(process.env.PORT), () => {
+    server.listen(parseInt(process.env.PORT), () => {
       console.log(`Server running on port ${parseInt(process.env.PORT)}...`);
     });
   })
