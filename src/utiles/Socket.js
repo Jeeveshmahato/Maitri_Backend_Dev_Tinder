@@ -18,11 +18,13 @@ const initailizeSocket = (server) => {
       const roomId = getSecretRoomId(userId, targetUserId);
       console.log(firstName + "joined Room : " + roomId);
       console.log(roomId);
+      socket.join(roomId);
     });
-    socket.on("sendMessage", ({ firstName, userId, targetUserId, text }) => {
+    socket.on("sendMessage", ({ firstName, userId,lastName, targetUserId, text }) => {
       const roomId = getSecretRoomId(userId, targetUserId);
+      console.log(roomId)
       console.log(firstName + " " + text);
-      io.to(roomId).emit("messageReceived", { firstName, text });
+      io.to(roomId).emit("messageReceived", { firstName,lastName, text });
     });
     socket.on("disconnect", () => {});
   });
