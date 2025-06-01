@@ -12,6 +12,7 @@ const paymentRouter = require("./Routes/payment");
 const http = require("http");
 const cors = require("cors");
 const initailizeSocket = require("./utiles/Socket");
+const chatRouter = require("./Routes/chat");
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -25,6 +26,7 @@ app.use("/", profileRouter);
 app.use("/", connectionRouter);
 app.use("/", userRequest);
 app.use("/", paymentRouter);
+app.use("/", chatRouter);
 require("./utiles/cornJob");
 const server = http.createServer(app);
 initailizeSocket(server);
