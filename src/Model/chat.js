@@ -10,6 +10,21 @@ const messageSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
+     firstName: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 20,
+    },
+    lastName: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 20,
+    },
+     img_Url: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
